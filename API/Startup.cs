@@ -4,6 +4,7 @@ using API.middleware;
 using AutoMapper;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,9 @@ namespace API
             services.AddAutoMapper(typeof(MappingProfile));
             
             services.AddSwaggerDocumentation();
+
+            services.AddCors(x=> x.AddPolicy("CorsPolicy",policy=>
+            policy.AllowAnyHeader().WithOrigins("http://localhost:4200")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +48,8 @@ namespace API
             app.UseRouting();
 
             app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
